@@ -13,14 +13,7 @@ class FolderController extends Controller
 {
     public function index()
     {
-        $initialRoot = [
-            'id' => 0,
-            'name' => 'root',
-            'parent_id' => null,
-            'children' => [],
-        ];
-
-        return view('explorer', compact('initialRoot'));
+        return view('explorer');
     }
 
     // Create a folder

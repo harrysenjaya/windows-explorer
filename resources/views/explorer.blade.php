@@ -125,7 +125,6 @@
 
     <script>
         $(function() {
-            const initialRoot = @json($initialRoot);
             const $tree = $('#tree');
             const $subfolders = $('#subfolders');
             const $files = $('#files');
@@ -513,15 +512,13 @@
                 }
             });
 
-            // Initial render from server-provided root
-            renderTree(initialRoot);
             // Keep right panel completely empty on page load
             setRightPanelVisible(false);
-            // Always fetch root children immediately on load (virtual root id=0)
+            // Initial render: fetch root children and build virtual root
             (async () => {
                 try {
                     const res = await fetch('/api/folders/0/children');
-                    if (!res.ok) return;
+                    if (!res.ok) throw new Error('failed');
                     const children = await res.json();
                     const rootNode = {
                         id: 0,
@@ -531,7 +528,10 @@
                         child_count: children.length
                     };
                     renderTree(rootNode);
-                } catch (_) {}
+                } catch (_) {
+                    // Fallback: render an empty virtual root (lazy-load on expand)
+                    renderTree({ id: 0, name: 'root', parent_id: null, children: [], child_count: 0 });
+                }
             })();
         });
     </script>
