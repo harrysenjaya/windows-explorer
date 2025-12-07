@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FolderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/folders/{id}/children', [FolderController::class, 'children']);
+Route::get('/folders/{id}/files', [FolderController::class, 'files']);
+
+Route::post('/folders', [FolderController::class, 'store']);
+Route::put('/folders/{id}', [FolderController::class, 'update']);
+Route::delete('/folders/{id}', [FolderController::class, 'destroy']);
